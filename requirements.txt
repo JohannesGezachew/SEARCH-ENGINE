@@ -1,0 +1,6 @@
+Flask==3.0.3
+Werkzeug==3.0.5
+nltk==3.7
+pandas==1.4.2
+scikit-learn==1.0.2
+schedule==1.1.0
