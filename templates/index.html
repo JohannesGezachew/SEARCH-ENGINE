@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document Search Engine</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link
+      href="{{ url_for('static', filename='style.css') }}"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Document Search</h1>
+        <p class="text-muted">Search and manage your documents with advanced filtering.</p>
+      </div>
+
+      <div class="search-section">
+        <form method="post" action="/" class="search-form">
+          <div class="search-wrapper">
+            <input
+              type="text"
+              name="query"
+              class="input"
+              placeholder="Search documents..."
+              value="{{ query or '' }}"
+            >
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-search"></i>
+              Search
+            </button>
+          </div>
+        </form>
+
+        <div class="actions">
+          <a href="{{ url_for('upload_file') }}" class="btn btn-outline">
+            <i class="bi bi-upload"></i>
+            Upload Document
+          </a>
+        </div>
+      </div>
+
+      {% if results is not none %}
+      <div class="table-container">
+        <div class="search-controls">
+          <input
+            type="text"
+            class="input"
+            placeholder="Filter results..."
+            id="searchInput"
+            oninput="filterTable()"
+          >
+
+          <div class="dropdown">
+            <button class="btn btn-outline" onclick="toggleDropdown()">
+              Columns <i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="dropdown-content" id="columnDropdown">
+              <div class="dropdown-item">
+                <label>
+                  <input type="checkbox" checked onchange="toggleColumn('title')"> Title
+                </label>
+              </div>
+              <div class="dropdown-item">
+                <label>
+                  <input type="checkbox" checked onchange="toggleColumn('snippet')"> Snippet
+                </label>
+              </div>
+              <div class="dropdown-item">
+                <label>
+                  <input type="checkbox" checked onchange="toggleColumn('score')"> Score
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="table" id="resultsTable">
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" class="checkbox" onclick="toggleAllRows(this)" aria-label="Select all">
+                </th>
+                <th onclick="sortTable(0)" class="sortable">
+                  <button class="btn btn-ghost">
+                    Title <i class="bi bi-arrow-down-up"></i>
+                  </button>
+                </th>
+                <th>Snippet</th>
+                <th onclick="sortTable(2)" class="sortable">
+                  <button class="btn btn-ghost">
+                    Score <i class="bi bi-arrow-down-up"></i>
+                  </button>
+                </th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for result in results %}
+              <tr>
+                <td>
+                  <input type="checkbox" class="checkbox row-checkbox">
+                </td>
+                <td>{{ result.title }}</td>
+                <td>{{ result.snippet|safe }}</td>
+                <td>{{ "%.2f"|format(result.score) }}</td>
+                <td>
+                  <div class="dropdown">
+                    <button class="btn btn-ghost" onclick="toggleActionMenu(this)">
+                      <i class="bi bi-three-dots"></i>
+                    </button>
+                    <div class="dropdown-content">
+                      <div class="dropdown-item" onclick="viewDetails('{{ result.title }}')">View Details</div>
+                      <div class="dropdown-item" onclick="copyTitle('{{ result.title }}')">Copy Title</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <div class="selection-info">
+            <span id="selectedCount">0</span> of {{ results|length }} row(s) selected
+          </div>
+          <div class="pagination-controls">
+            <button class="btn btn-outline" onclick="previousPage()" id="prevBtn">Previous</button>
+            <button class="btn btn-outline" onclick="nextPage()" id="nextBtn">Next</button>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <i class="bi bi-search"></i>
+        <p>Enter a search query to find documents</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
