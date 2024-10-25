@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Document</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Upload Document</h1>
+            <p class="text-muted">Add new documents to your collection</p>
+        </div>
+
+        <div class="upload-container">
+            {% if error %}
+            <div class="alert alert-error">
+                <i class="bi bi-exclamation-triangle"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+            {% if success %}
+            <div class="alert alert-success">
+                <i class="bi bi-check-circle"></i>
+                {{ success }}
+            </div>
+            {% endif %}
+            <form method="post" enctype="multipart/form-data" class="upload-form">
+                <div class="file-input-wrapper">
+                    <input
+                        type="file"
+                        name="file"
+                        id="file"
+                        class="file-input"
+                        accept=".txt,.doc,.docx,.pdf"
+                        aria-label="Choose a document to upload"
+                        aria-describedby="file-types"
+                    >
+                    <span id="file-types" class="sr-only">
+                        Accepted file types: PDF, DOC, DOCX, and TXT
+                    </span>
+                    <label for="file" class="file-label">
+                        <i class="bi bi-cloud-upload"></i>
+                        <span>Choose a file</span>
+                        <span class="file-types">PDF, DOC, DOCX, TXT</span>
+                    </label>
+                </div>
+
+                <div class="upload-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-upload"></i>
+                        Upload Document
+                    </button>
+                    <a href="{{ url_for('search_page') }}" class="btn btn-outline">
+                        <i class="bi bi-arrow-left"></i>
+                        Back to Search
+                    </a>
+                </div>
+            </form>
+            <div class="upload-progress" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <span class="progress-text">Uploading... 0%</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
