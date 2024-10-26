@@ -1,6 +1,8 @@
 # Document Search Engine
 
 A Flask-based web application that allows users to upload, search, and manage documents. This project demonstrates the use of text processing, search indexing, and web development with Flask.
+<img width="959" alt="image" src="https://github.com/user-attachments/assets/cb8928b9-5bbc-4d8a-b585-39cedef9b39c">
+
 
 ## Features
 
